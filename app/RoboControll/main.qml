@@ -1,37 +1,72 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
+import QtQuick 2.8
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.2
 
 ApplicationWindow {
+    id:root
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    minimumWidth: startStopRow.width + 40
 
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+    title: qsTr("RoboControll")
 
-        Page1 {
-        }
-
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
+    ColumnLayout{
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 10,10,10,10
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.maximumHeight: parent.height
+        RowLayout
+        {
+            id: startStopRow
+            Label
+            {
+                text: qsTr("Speed: ")
             }
+
+            TextField{
+                id: speedTextField
+                placeholderText: qsTr("speed")
+                inputMethodHints: Qt.ImhDigitsOnly
+            }
+
+            Button{
+                id: startButton
+                text: "Start"
+                onClicked: logTextEdit.text += "Robot started at speed: " + speedTextField.text + "\n"
+            }
+
+            Button{
+                id: stopButton
+                text: "Stop"
+                onClicked: logTextEdit.text += "Robot stopped\n"
+            }
+
         }
+
+
+        Flickable {
+            id: flickable
+            Layout.fillHeight: true
+            Layout.maximumHeight: root.height - startStopRow.height - 20
+            TextArea {
+                id: logTextEdit
+                wrapMode: TextArea.Wrap
+            }
+            ScrollBar.vertical: ScrollBar { }
+        }
+
+
+
+
     }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("First")
-        }
-        TabButton {
-            text: qsTr("Second")
-        }
-    }
+
+
+
+
+
+
 }
