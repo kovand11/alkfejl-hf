@@ -1,6 +1,8 @@
 import QtQuick 2.8
 import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.2
+import QtQuick.Layouts 1.3
+import QtQml 2.8
+
 
 ApplicationWindow {
     id:root
@@ -10,6 +12,17 @@ ApplicationWindow {
     minimumWidth: startStopRow.width + 40
 
     title: qsTr("RoboControll")
+
+    //Slots (kinda)
+    signal addLogLine(string msg)
+    onAddLogLine: logTextEdit.append(msg)
+
+    signal clearLog()
+    onClearLog: logTextEdit.clear()
+
+    //Signals
+    signal robotStart(string speed)
+    signal robotStop()
 
     ColumnLayout{
         anchors.top: parent.top
@@ -29,44 +42,28 @@ ApplicationWindow {
             TextField{
                 id: speedTextField
                 placeholderText: qsTr("speed")
-                inputMethodHints: Qt.ImhDigitsOnly
             }
 
             Button{
                 id: startButton
                 text: "Start"
-                onClicked: logTextEdit.text += "Robot started at speed: " + speedTextField.text + "\n"
+                onClicked:{
+                    robotStart(speedTextField.text)
+                }
             }
 
             Button{
                 id: stopButton
                 text: "Stop"
-                onClicked: logTextEdit.text += "Robot stopped\n"
+                onClicked:{
+                    robotStop()
+                }
             }
-
         }
-
-
-        Flickable {
-            id: flickable
-            Layout.fillHeight: true
-            Layout.maximumHeight: root.height - startStopRow.height - 20
-            TextArea {
-                id: logTextEdit
-                wrapMode: TextArea.Wrap
-            }
-            ScrollBar.vertical: ScrollBar { }
+        TextArea {
+            id: logTextEdit
+            wrapMode: TextArea.Wrap
         }
-
-
-
 
     }
-
-
-
-
-
-
-
 }
