@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    minimumWidth: startStopRow.width + 40
+    minimumWidth: topLayout.width + 40
 
     title: qsTr("RoboControll")
 
@@ -17,53 +17,107 @@ ApplicationWindow {
     signal addLogLine(string msg)
     onAddLogLine: logTextEdit.append(msg)
 
+    signal setConnectionStatus(string status)
+    onSetConnectionStatus: connectionStatusLabel.text = status
+
     signal clearLog()
     onClearLog: logTextEdit.clear()
 
     //Signals
-    signal robotStart(string speed)
-    signal robotStop()
+    signal robotConnect(string address)
+    signal robotDisconnect()
+    signal robotSend(string message)
 
     ColumnLayout{
+        id: topLayout
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.margins: 10,10,10,10
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.maximumHeight: parent.height
+
+
+
         RowLayout
         {
-            id: startStopRow
+            spacing: 10
+
             Label
             {
-                text: qsTr("Speed: ")
+                text: qsTr("Address: ")
             }
 
             TextField{
                 id: speedTextField
-                placeholderText: qsTr("speed")
+                placeholderText: qsTr("ip:port")
             }
 
             Button{
-                id: startButton
-                text: "Start"
+                id: connectButton
+                text: qsTr("Connect")
                 onClicked:{
-                    robotStart(speedTextField.text)
+                    robotConnect(speedTextField.text)
                 }
             }
 
             Button{
-                id: stopButton
-                text: "Stop"
+                id: disconnectButton
+                text: qsTr("Disonnect")
                 onClicked:{
-                    robotStop()
+                    robotDisconnect()
+                }
+            }
+
+            Label
+            {
+                id: connectionStatusLabel
+                text: ""
+            }
+
+
+
+        }
+
+
+
+
+
+        RowLayout
+        {
+            spacing: 10
+            Label
+            {
+                text: qsTr("Command: ")
+            }
+
+            TextField{
+                id: commandTextField
+                placeholderText: qsTr("command")
+            }
+
+            Button{
+                id: submitButton
+                text: "Send"
+                onClicked:{
+                    robotSend(commandTextField.text)
                 }
             }
         }
+
+
         TextArea {
             id: logTextEdit
-            wrapMode: TextArea.Wrap
+            //wrapMode: TextArea.Wrap
         }
 
     }
 }
+
+/*Button{
+    id: stopButton
+    text: "Stop"
+    onClicked:{
+        robotStop()
+    }
+}*/

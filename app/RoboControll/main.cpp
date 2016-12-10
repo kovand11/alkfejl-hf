@@ -16,12 +16,14 @@ int main(int argc, char *argv[])
     RobotHandler *robotHandler = new RobotHandler();
 
     //UI to C++
-    QObject::connect(root,SIGNAL(robotStart(QString)),robotHandler,SLOT(onRobotStart(QString)));
-    QObject::connect(root,SIGNAL(robotStop()),robotHandler,SLOT(onRobotStop()));
+    QObject::connect(root,SIGNAL(robotSend(QString)),robotHandler,SLOT(onSend(QString)));
+    QObject::connect(root,SIGNAL(robotDisconnect()),robotHandler,SLOT(onDisconnect()));
+    QObject::connect(root,SIGNAL(robotConnect(QString)),robotHandler,SLOT(onConnect(QString)));
 
     //C++ to UI
     QObject::connect(robotHandler,SIGNAL(logLine(QString)),root,SIGNAL(addLogLine(QString)));
     QObject::connect(robotHandler,SIGNAL(logClear()),root,SIGNAL(clearLog()));
+    QObject::connect(robotHandler,SIGNAL(connectionStatusChanged(QString)),root,SIGNAL(setConnectionStatus(QString)));
 
     return app.exec();
 }
