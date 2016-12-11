@@ -12,3 +12,6 @@ TEMPLATE = app
 
 SOURCES += tst_unittest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
+
+HEADERS += \
+    tst_unittest.h

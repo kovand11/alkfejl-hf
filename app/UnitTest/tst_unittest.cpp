@@ -1,63 +1,14 @@
-//#define REAL_CHECK_SPEED_FORMAT_READY
-
-#include <QString>
-#include <QVector>
-#include <QtTest>
-
-// Use dummy class until the real functions are ready
-#ifdef REAL_CHECK_SPEED_FORMAT_READY
-#include "../RoboControll/robothandler.h"
-#else
-class RobotHandler : public QObject
-{
-    Q_OBJECT
-public:
-    bool checkSpeedFormat(QString speed)
-    {
-        Q_UNUSED(speed);
-        return true;
-    }
-    bool checkVectorFormat(QVector<int> intVector)
-    {
-        Q_UNUSED(intVector);
-        return true;
-    }
-};
-#endif /*REAL_CHECK_SPEED_FORMAT_READY*/
-
-class UnitTest : public QObject
-{
-    Q_OBJECT
-
-public:
-    UnitTest();
-
-private Q_SLOTS:
-    //Test functions
-    void case_RobotHandler_checkSpeedFormat_data();
-    void case_RobotHandler_checkSpeedFormat();
-
-    void case_RobotHandler_checkVectorFormat();
-
-private:
-    //Instance of UUT
-    RobotHandler testRobotHandler;
-};
-
-UnitTest::UnitTest()
-    : testRobotHandler()
-{
-}
+#include "tst_unittest.h"
 
 void UnitTest::case_RobotHandler_checkSpeedFormat_data()
 {
     QTest::addColumn<QString>("string");
     QTest::addColumn<QString>("result");
 
-    QTest::newRow("Any positive number is valid.")       << "1"      << "true";
-    QTest::newRow("Any positive decimal number is valid.")        << "2.3"    << "true";
-    QTest::newRow("Not a number.")   << "text"   << "false";
-    QTest::newRow("Speed cannot be negative.")       << "-4"     << "false";
+    QTest::newRow("Any positive number is valid.")          << "1"      << "true";
+    QTest::newRow("Any positive decimal number is valid.")  << "2.3"    << "true";
+    QTest::newRow("Not a number.")                          << "text"   << "false";
+    QTest::newRow("Speed cannot be negative.")              << "-4"     << "false";
 }
 
 void UnitTest::case_RobotHandler_checkSpeedFormat()
@@ -83,4 +34,4 @@ void UnitTest::case_RobotHandler_checkVectorFormat()
 
 QTEST_APPLESS_MAIN(UnitTest)
 
-#include "tst_unittest.moc"
+//#include "tst_unittest.moc"
