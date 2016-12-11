@@ -46,7 +46,6 @@ void RobotHandler::onDisconnect()
 
 void RobotHandler::onSend(QString message)
 {
-    qDebug() << "onSend" << message;
     tcpSocket->write(message.toStdString().c_str());
 }
 
@@ -57,6 +56,7 @@ void RobotHandler::readTcpData()
 
 void RobotHandler::onTcpConnected()
 {
+    emit connectionStatusChanged(false,true);
     emit logLine("Successfully connected");
 }
 
