@@ -26,16 +26,20 @@ ApplicationWindow {
     signal addLogLine(string msg)
     onAddLogLine: logTextEdit.append(msg)
 
-    signal setConnectionStatus(string status)
-    onSetConnectionStatus: tcpConnectionText = status
+    signal setTcpStatus(bool busy,bool connected)
+    onSetTcpStatus: {
+        isTcpBusy = busy
+        isTcpConnected = connected
+
+    }
 
     signal clearLog()
     onClearLog: logTextEdit.clear()
 
     //Signals
-    signal robotConnect(string address)
-    signal robotDisconnect()
-    signal robotSend(string message)
+    signal tcpConnect(string address)
+    signal tcpDisconnect()
+    signal tcpSend(string message)
 
     RowLayout
     {
@@ -73,9 +77,7 @@ ApplicationWindow {
                 Button{
                     id: connectButton
                     text: isTcpConnected ? qsTr("Disconnect") : qsTr("Connect")
-                    onClicked:{ isTcpConnected ? robotDisconnect() : robotConnect("")
-                        isTcpConnected = ! isTcpConnected
-                        logTextEdit.append("random info to show")
+                    onClicked:{ isTcpConnected ? tcpDisconnect() : tcpConnect(speedTextField.text)
                     }
                     enabled: !isTcpBusy
                 }

@@ -14,7 +14,7 @@ public:
     explicit RobotHandler(QObject *parent = 0);
 
 signals:
-    void connectionStatusChanged(QString status);
+    void connectionStatusChanged(bool,bool);
     void logLine(QString msg);
     void logClear();
 
