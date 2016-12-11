@@ -343,18 +343,10 @@ ApplicationWindow {
                     text: "Send"
                     enabled: isTcpConnected
                     onClicked:{
-                        robotSend(commandTextField.text)
+                        tcpSend(commandTextField.text)
                     }
                 }
             }
         }
     }
 }
-
-/*Button{
-    id: stopButton
-    text: "Stop"
-    onClicked:{
-        robotStop()
-    }
-}*/
