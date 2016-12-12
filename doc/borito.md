@@ -3,7 +3,7 @@
 Csapatnév: Müzli
  
 Csapattagok Neptun kóddal:
-  * Gellén Ágnes ()
+  * Gellén Ágnes (IUFQ58)
   * Konkolyi Krisztina (D93YHN)
   * Kovács András (HIC199)
 
