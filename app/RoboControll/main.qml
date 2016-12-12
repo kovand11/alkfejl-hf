@@ -55,6 +55,8 @@ ApplicationWindow {
 
 
 
+
+
     signal distanceChanged(real distance)
     onDistanceChanged:{
         if (distanceData.count == 20)
@@ -87,6 +89,7 @@ ApplicationWindow {
     signal tcpConnect(string address)
     signal tcpDisconnect()
     signal tcpSend(string message,bool isEmulated)
+    signal speedAndSteerChanged(real speed,real steer,bool isForward,bool isBackward,bool isStop)
 
     RowLayout
     {
@@ -136,6 +139,9 @@ ApplicationWindow {
                 width: 300
                 height: 300
                 color: "black"
+
+                property bool isStopped: true
+                property bool isForward: false
                 MouseArea
                 {
                     property int correctedMouseX: 0
@@ -143,6 +149,7 @@ ApplicationWindow {
                     anchors.fill: parent
                     onPositionChanged:
                     {
+                        //Positioning of the red circle
                         if (mouseX + controllCrosshair.width/2 > controllTarget.width)
                         {
                             correctedMouseX = controllTarget.width - controllCrosshair.width/2
@@ -168,16 +175,73 @@ ApplicationWindow {
                         {
                             correctedMouseY = mouseY;
                         }
-
-
                         controllCrosshair.x = correctedMouseX - controllCrosshair.width/2
                         controllCrosshair.y = correctedMouseY - controllCrosshair.height/2
+
+
+                        var xRange = controllTarget.width - controllCrosshair.width;
+                        var yRange = controllTarget.width - controllCrosshair.width;
+
+
+                        if (controllTarget.isStopped)
+                        {
+                            controllTarget.isStopped = false
+
+                            if (-controllCrosshair.y/yRange*2+1 > 0)
+                            {
+                                speedAndSteerChanged(-controllCrosshair.y/yRange*2+1,controllCrosshair.x/xRange*2-1,true,false,false)
+                                controllTarget.isForward = true;
+                                controllTarget.isStopped = false
+                            }
+                            else if (-controllCrosshair.y/yRange*2+1 < 0)
+                            {
+                                speedAndSteerChanged(+controllCrosshair.y/yRange*2-1,controllCrosshair.x/xRange*2-1,false,true,false)
+                                controllTarget.isForward = false;
+                                controllTarget.isStopped = false
+
+                            }
+                            else //speed is 0
+                            {
+                                speedAndSteerChanged(-controllCrosshair.y/yRange*2+1,controllCrosshair.x/xRange*2-1,false,false,false)
+                            }
+                        }
+                        else
+                        {
+                            if (controllTarget.isForward)
+                            {
+                                //speed > 0
+                                if (-controllCrosshair.y/yRange*2+1 > 0)
+                                {
+                                    speedAndSteerChanged(-controllCrosshair.y/yRange*2+1,controllCrosshair.x/xRange*2-1,false,false,false)
+                                }
+                                else
+                                {
+                                    speedAndSteerChanged(controllCrosshair.y/yRange*2-1,controllCrosshair.x/xRange*2-1,false,true,false)
+                                    controllTarget.isForward = false
+                                }
+                            }
+                            else
+                            {
+                                //speed > 0
+                                if (-controllCrosshair.y/yRange*2+1 > 0)
+                                {
+                                    speedAndSteerChanged(-controllCrosshair.y/yRange*2+1,controllCrosshair.x/xRange*2-1,true,false,false)
+                                    controllTarget.isForward = true
+                                }
+                                else
+                                {
+                                    speedAndSteerChanged(controllCrosshair.y/yRange*2-1,controllCrosshair.x/xRange*2-1,false,false,false)
+                                }
+                            }
+                        }
 
                     }
                     onDoubleClicked:
                     {
+                        controllTarget.isStopped = true
+                        speedAndSteerChanged(0,0,false,false,true)
                         controllCrosshair.x = controllTarget.width/2 - controllCrosshair.width/2
-                        controllCrosshair.y = controllTarget.height - controllCrosshair.height
+                        controllCrosshair.y = controllTarget.height/2 - controllCrosshair.height/2
                     }
 
                 }
@@ -189,7 +253,7 @@ ApplicationWindow {
                     height: 20
                     id: controllCrosshair
                     x: controllTarget.width/2 - controllCrosshair.width/2
-                    y: controllTarget.height - controllCrosshair.width
+                    y: controllTarget.height/2 - controllCrosshair.width/2
                     radius: 20
                     color: "red"
                     visible: isTcpConnected || isEmulatedCheckBox.checked

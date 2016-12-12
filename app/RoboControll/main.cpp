@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     QObject::connect(root,SIGNAL(tcpSend(QString,bool)),robotHandler,SLOT(onSend(QString,bool)));
     QObject::connect(root,SIGNAL(tcpDisconnect()),robotHandler,SLOT(onDisconnect()));
     QObject::connect(root,SIGNAL(tcpConnect(QString)),robotHandler,SLOT(onConnect(QString)));
+    QObject::connect(root,SIGNAL(speedAndSteerChanged(qreal,qreal,bool,bool,bool)),robotHandler,SLOT(speedAndSteerChanged(qreal,qreal,bool,bool,bool)));
 
     //C++ to UI
     QObject::connect(robotHandler,SIGNAL(logLine(QString)),root,SIGNAL(addLogLine(QString)));

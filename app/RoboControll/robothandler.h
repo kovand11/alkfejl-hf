@@ -37,6 +37,7 @@ private slots:
     void onTcpConnected();
     void onTcpDisconnected();
     void onTcpError();
+    void speedAndSteerChanged(qreal speed,qreal steer,bool isForward,bool isBackward,bool isStop);
 
 
 private:

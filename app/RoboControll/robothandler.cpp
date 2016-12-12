@@ -81,6 +81,22 @@ void RobotHandler::onTcpError()
     emit logLine("Error: Unknown Tcp");
 }
 
+void RobotHandler::speedAndSteerChanged(qreal speed,qreal steer,bool isForward,bool isBackward,bool isStop)
+{
+    if (isForward)
+        sendCommandToRobot("forward");
+
+    if (isBackward)
+        sendCommandToRobot("backward");
+
+    sendCommandToRobot("speed " + QString::number(speed) );
+    sendCommandToRobot("turn " + QString::number(steer) );
+
+    if (isStop)
+        sendCommandToRobot("stop");
+
+}
+
 std::pair<QString, QStringList> RobotHandler::preprocessCommand(QString command)
 {
     QStringList splitted = command.split(' ');
@@ -99,7 +115,7 @@ void RobotHandler::executeCommand(QString verb, QStringList params)
 
     else if (verb == "ping")
     {
-        sendCommandToRobot("OK");
+        sendCommandToRobot("ok");
     }
 
     else if (verb == "touch")
