@@ -29,7 +29,7 @@ void RobotHandler::onConnect(QString address)
     else
     {
         emit connectionStatusChanged(false,false);
-        emit logLine("Invalid address");
+        emit logLine("Error: Invalid address");
         return;
     }
 
@@ -44,9 +44,18 @@ void RobotHandler::onDisconnect()
 }
 
 
-void RobotHandler::onSend(QString message)
+void RobotHandler::onSend(QString command,bool isEmulatedInput)
 {
-    tcpSocket->write(message.toStdString().c_str());
+    if (isEmulatedInput)
+    {
+        //        verb     parameters
+        std::pair<QString, QStringList> preprocessedCommand = preprocessCommand(command);
+        executeCommand(preprocessedCommand.first,preprocessedCommand.second);
+    }
+    else
+    {
+        sendCommandToRobot(command);
+    }
 }
 
 void RobotHandler::readTcpData()
@@ -57,19 +66,106 @@ void RobotHandler::readTcpData()
 void RobotHandler::onTcpConnected()
 {
     emit connectionStatusChanged(false,true);
-    emit logLine("Successfully connected");
+    emit logLine("Event: Successfully connected");
 }
 
 void RobotHandler::onTcpDisconnected()
 {
     emit connectionStatusChanged(false,false);
-    emit logLine("Disconnected");
+    emit logLine("Event: Disconnected");
 }
 
 void RobotHandler::onTcpError()
 {
     emit connectionStatusChanged(false,false);
     emit logLine("Error: Unknown Tcp");
+}
+
+std::pair<QString, QStringList> RobotHandler::preprocessCommand(QString command)
+{
+    QStringList splitted = command.split(' ');
+    QString verb = splitted.at(0);
+    splitted.removeAt(0);
+    QStringList params = splitted;
+    return std::pair<QString, QStringList>(verb,params);
+}
+
+void RobotHandler::executeCommand(QString verb, QStringList params)
+{
+    if (verb == "")
+    {
+        logLine("Error: Empty incomming command");
+    }
+    else if (verb == "ping")
+    {
+        sendCommandToRobot("OK");
+    }
+    else if (verb == "touch")
+    {
+        if (params.length() == 1)
+        {
+            emit touchSensorChanged( params.at(0) != "0" && params.at(0) != "false");
+        }
+        else
+        {
+            logLine("Error: touch has an invalid param list: " + params.join(','));
+        }
+    }
+    else if (verb == "speed")
+    {
+        if (params.length() == 1)
+        {
+            bool ok;
+            double speed = params.at(0).toDouble(&ok);
+            if (!ok)
+            {
+                logLine("Error: speed has an invalid param : " + params.at(0));
+            }
+            else
+            {
+                emit speedChanged(QString::number(speed,'f',2));
+            }
+        }
+        else
+        {
+            logLine("Error: speed has an invalid param list: " + params.join(','));
+        }
+
+    }
+    else if (verb == "steer")
+    {
+        if (params.length() == 1)
+        {
+            bool ok;
+            double steer = params.at(0).toDouble(&ok);
+            if (!ok)
+            {
+                logLine("Error: steer has an invalid param : " + params.at(0));
+            }
+            else
+            {
+                emit steerChanged(QString::number(steer,'f',2));
+            }
+        }
+        else
+        {
+            logLine("Error: steer has an invalid param list: " + params.join(','));
+        }
+    }
+    else
+    {
+        logLine("Error: Unknown command");
+    }
+
+}
+
+void RobotHandler::sendCommandToRobot(QString command)
+{
+    if (tcpSocket->isOpen())
+        tcpSocket->write(command.toStdString().c_str());
+
+    if (true)
+        logLine("Output: " + command);
 }
 
 

@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     RobotHandler *robotHandler = new RobotHandler();
 
     //UI to C++
-    QObject::connect(root,SIGNAL(tcpSend(QString)),robotHandler,SLOT(onSend(QString)));
+    QObject::connect(root,SIGNAL(tcpSend(QString,bool)),robotHandler,SLOT(onSend(QString,bool)));
     QObject::connect(root,SIGNAL(tcpDisconnect()),robotHandler,SLOT(onDisconnect()));
     QObject::connect(root,SIGNAL(tcpConnect(QString)),robotHandler,SLOT(onConnect(QString)));
 
@@ -25,6 +25,9 @@ int main(int argc, char *argv[])
     QObject::connect(robotHandler,SIGNAL(logLine(QString)),root,SIGNAL(addLogLine(QString)));
     QObject::connect(robotHandler,SIGNAL(logClear()),root,SIGNAL(clearLog()));
     QObject::connect(robotHandler,SIGNAL(connectionStatusChanged(bool,bool)),root,SIGNAL(setTcpStatus(bool,bool)));
+    QObject::connect(robotHandler,SIGNAL(touchSensorChanged(bool)),root,SIGNAL(touchSensorChanged(bool)));
+    QObject::connect(robotHandler,SIGNAL(speedChanged(QString)),root,SIGNAL(speedChanged(QString)));
+    QObject::connect(robotHandler,SIGNAL(steerChanged(QString)),root,SIGNAL(steerChanged(QString)));
 
     return app.exec();
 }

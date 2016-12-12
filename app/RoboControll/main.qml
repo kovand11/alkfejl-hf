@@ -36,10 +36,26 @@ ApplicationWindow {
     signal clearLog()
     onClearLog: logTextEdit.clear()
 
+    signal touchSensorChanged(bool checked)
+    onTouchSensorChanged:{
+        touchIndicator.checked = checked
+    }
+
+    signal speedChanged(string speed)
+    onSpeedChanged:{
+        speedLabel.text = "Speed: " + speed + " km/h"
+    }
+
+
+    signal steerChanged(string steer)
+    onSteerChanged:{
+        steerLabel.text = "Steer: " + steer + " deg"
+    }
+
     //Signals
     signal tcpConnect(string address)
     signal tcpDisconnect()
-    signal tcpSend(string message)
+    signal tcpSend(string message,bool isEmulated)
 
     RowLayout
     {
@@ -76,10 +92,9 @@ ApplicationWindow {
 
                 Button{
                     id: connectButton
-                    text: isTcpConnected ? qsTr("Disconnect") : qsTr("Connect")
-                    onClicked:{ isTcpConnected ? tcpDisconnect() : tcpConnect(speedTextField.text)
+                    text: isTcpConnected || isTcpBusy ? qsTr("Disconnect") : qsTr("Connect")
+                    onClicked:{ isTcpConnected || isTcpBusy ? tcpDisconnect() : tcpConnect(speedTextField.text)
                     }
-                    enabled: !isTcpBusy
                 }
 
             }
@@ -146,7 +161,7 @@ ApplicationWindow {
                     y: controllTarget.height - controllCrosshair.width
                     radius: 20
                     color: "red"
-                    visible: isTcpConnected
+                    visible: isTcpConnected || isEmulatedCheckBox.checked
 
                 }
 
@@ -179,7 +194,10 @@ ApplicationWindow {
                         }
 
                         Label{
-                            text: "Result"
+                            text: "<u>Result</u>"
+                            color: "blue"
+
+
                         }
 
                     }
@@ -199,8 +217,22 @@ ApplicationWindow {
             }
 
             GroupBox{
-                title: "Display settings"
-                Label {text: "If we have too much time"}
+                title: "Settings"
+                ColumnLayout{
+                    CheckBox
+                    {
+                        id: isShowOutput
+                        text: "Show output sent to the robot"
+                        enabled: false
+                        checked: true
+                    }
+
+                    CheckBox
+                    {
+                        id: isEmulatedCheckBox
+                        text: "Emulate robot"
+                    }
+                }
 
             }
 
@@ -231,7 +263,6 @@ ApplicationWindow {
             }
 
             ChartView {
-                anchors.top: controllTarget.bottom
                 width: 400
                 Layout.fillHeight: true
                 title: "Light sensor"
@@ -287,20 +318,24 @@ ApplicationWindow {
 
                 Rectangle
                 {
+                    property bool checked: false
+                    id:touchIndicator
                     width:50
                     height:50
                     radius:50
-                    color: "black"
+                    color: checked ? "red" : "black"
                 }
 
                 Label
                 {
-                    text: "Speed: 10 km/h"
+                    id: speedLabel
+                    text: "Speed: - km/h"
                 }
 
                 Label
                 {
-                    text: "Steer: 10 km/h"
+                    id: steerLabel
+                    text: "Steer: - deg"
                 }
             }
 
@@ -341,11 +376,20 @@ ApplicationWindow {
                 Button{
                     id: submitButton
                     text: "Send"
-                    enabled: isTcpConnected
+                    enabled: isTcpConnected || isEmulatedCheckBox.checked
                     onClicked:{
-                        tcpSend(commandTextField.text)
+                        tcpSend(commandTextField.text,isEmulatedCheckBox.checked)
+                        if (!isRememberCheckBox.checked)
+                            commandTextField.text = ""
                     }
                 }
+
+                CheckBox
+                {
+                    id: isRememberCheckBox
+                    text: "Remember"
+                }
+
             }
         }
     }
