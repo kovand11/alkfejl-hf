@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
     QObject::connect(robotHandler,SIGNAL(touchSensorChanged(bool)),root,SIGNAL(touchSensorChanged(bool)));
     QObject::connect(robotHandler,SIGNAL(speedChanged(QString)),root,SIGNAL(speedChanged(QString)));
     QObject::connect(robotHandler,SIGNAL(steerChanged(QString)),root,SIGNAL(steerChanged(QString)));
+    QObject::connect(robotHandler,SIGNAL(distanceChanged(qreal)),root,SIGNAL(distanceChanged(qreal)));
+    QObject::connect(robotHandler,SIGNAL(rgbChanged(qreal,qreal,qreal)),root,SIGNAL(rgbChanged(qreal,qreal,qreal)));
+
 
     return app.exec();
 }

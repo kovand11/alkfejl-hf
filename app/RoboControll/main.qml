@@ -1,5 +1,5 @@
-import QtQuick 2.8
-import QtQuick.Controls 1.4
+import QtQuick 2.7
+import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
 import QtQml 2.8
 import QtCharts 2.1
@@ -50,6 +50,37 @@ ApplicationWindow {
     signal steerChanged(string steer)
     onSteerChanged:{
         steerLabel.text = "Steer: " + steer + " deg"
+    }
+
+
+
+
+    signal distanceChanged(real distance)
+    onDistanceChanged:{
+        if (distanceData.count == 20)
+        {
+            distanceData.removePoints(0,1);
+            axisXd.max = axisXd.max+1
+            axisXd.min = axisXd.min+1
+        }
+        var x = distanceData.count < 19 ? distanceData.count : axisXd.max
+        distanceData.append(x,distance)
+    }
+
+    signal rgbChanged(real r,real g,real b)
+    onRgbChanged:{
+        if (rChannel.count == 20) //all channel has the same count
+        {
+            rChannel.removePoints(0,1);
+            gChannel.removePoints(0,1);
+            bChannel.removePoints(0,1);
+            axisXc.max = axisXc.max+1
+            axisXc.min = axisXc.min+1
+        }
+        var x = rChannel.count < 19 ? rChannel.count : axisXc.max
+        rChannel.append(x,r)
+        gChannel.append(x,g)
+        bChannel.append(x,b)
     }
 
     //Signals
@@ -232,6 +263,53 @@ ApplicationWindow {
                         id: isEmulatedCheckBox
                         text: "Emulate robot"
                     }
+
+                    CheckBox
+                    {
+                        id: isShowAllOnPlot
+                        text: "Show every data on plot"
+                        enabled: false
+                        checked: true
+                    }
+
+                    /*Button
+                    {
+                        text: "For Debug"
+                        onClicked: {
+
+
+                            if (rChannel.count == 20) //all channel has the same count
+                            {
+                                rChannel.removePoints(0,1);
+                                gChannel.removePoints(0,1);
+                                bChannel.removePoints(0,1);
+                                axisXc.max = axisXc.max+1
+                                axisXc.min = axisXc.min+1
+                            }
+                            var x = rChannel.count < 19 ? rChannel.count : axisXc.max
+                            rChannel.append(x,(Math.sin(x/3)+1)/2)
+                            gChannel.append(x,(Math.sin(x/3 + 1)+1)/2)
+                            bChannel.append(x,(Math.sin(x/3 + 2)+1)/2)
+
+
+                        }
+                    }
+
+                    Label{
+                        id: debugLabel1
+                    }
+
+                    Label{
+                        id: debugLabel2
+                    }
+
+                    Label{
+                        id: debugLabel3
+                    }
+
+                    Label{
+                        id: debugLabel4
+                    }*/
                 }
 
             }
@@ -244,65 +322,86 @@ ApplicationWindow {
         ColumnLayout
         {
             ChartView {
+                id: distancePlot
                 width: 400
                 Layout.fillHeight: true
                 title: "Distance sensor"
                 antialiasing: true
 
+                ValueAxis {
+                       id: axisXd
+                       min: 0
+                       max: 19
+                   }
+
+                ValueAxis {
+                       id: axisYd
+                       min: 0
+                       max: 5
+                   }
+
 
                 LineSeries {
+                    id: distanceData
                     name: "distance (m)"
-                    XYPoint { x: 0; y: 0 }
-                    XYPoint { x: 1.1; y: 2.1 }
-                    XYPoint { x: 1.9; y: 3.3 }
-                    XYPoint { x: 2.1; y: 2.1 }
-                    XYPoint { x: 2.9; y: 4.9 }
-                    XYPoint { x: 3.4; y: 3.0 }
-                    XYPoint { x: 4.1; y: 3.3 }
+                    axisX: axisXd
+                    axisY: axisYd
                 }
+
+
             }
 
             ChartView {
+                id: rgbPlot
                 width: 400
                 Layout.fillHeight: true
                 title: "Light sensor"
                 antialiasing: true
 
+                ValueAxis {
+                       id: axisXc
+                       min: 0
+                       max: 19
+                   }
+
+                ValueAxis {
+                       id: axisYc
+                       min: 0
+                       max: 1
+                   }
+
+
+
+
+
+
+
 
                 LineSeries {
+                    id: rChannel
                     color: "#FF1111"
                     name: "Red (%)"
-                    XYPoint { x: 0; y: 0 }
-                    XYPoint { x: 1.1; y: 2.1 }
-                    XYPoint { x: 1.9; y: 3.3 }
-                    XYPoint { x: 2.1; y: 2.1 }
-                    XYPoint { x: 2.9; y: 4.9 }
-                    XYPoint { x: 3.4; y: 3.0 }
-                    XYPoint { x: 4.1; y: 3.3 }
+                    axisX: axisXc
+                    axisY: axisYc
+
                 }
 
                 LineSeries {
+                    id: gChannel
                     color: "#11FF11"
                     name: "Green (%)"
-                    XYPoint { x: 0; y: 0 }
-                    XYPoint { x: 1.1; y: 2.5 }
-                    XYPoint { x: 1.9; y: 3.4 }
-                    XYPoint { x: 2.1; y: 2.2 }
-                    XYPoint { x: 2.9; y: 4.8 }
-                    XYPoint { x: 3.4; y: 3.9 }
-                    XYPoint { x: 4.1; y: 3.2 }
+                    axisX: axisXc
+                    axisY: axisYc
+
                 }
 
                 LineSeries {
+                    id: bChannel
                     color: "#1111FF"
                     name: "Blue (%)"
-                    XYPoint { x: 0; y: 0 }
-                    XYPoint { x: 1.1; y: 3.5 }
-                    XYPoint { x: 1.9; y: 4.9 }
-                    XYPoint { x: 2.1; y: 4.21 }
-                    XYPoint { x: 2.9; y: 2.8 }
-                    XYPoint { x: 3.4; y: 4.8 }
-                    XYPoint { x: 4.1; y: 4.2 }
+                    axisX: axisXc
+                    axisY: axisYc
+
                 }
 
 

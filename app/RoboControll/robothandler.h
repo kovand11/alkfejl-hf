@@ -24,6 +24,8 @@ signals:
     void touchSensorChanged(bool);
     void speedChanged(QString);
     void steerChanged(QString);
+    void distanceChanged(qreal);
+    void rgbChanged(qreal,qreal,qreal);
 
 public slots:
     void onConnect(QString address);
