@@ -1,9 +1,14 @@
-# Alkalmazásfejlesztés Házi Feladat #
+@mainpage Alkalmazásfejlesztés Házi Feladat
  
-Csapatnév:
+Csapatnév: Müzli
  
 Csapattagok Neptun kóddal:
-  * Andezit (AAA000)
-  * Bazalt (BBB000)
+  * Gellén Ágnes (IUFQ58)
+  * Konkolyi Krisztina (D93YHN)
+  * Kovács András (HIC199)
 
 Bemutató videó URL (max. 5 perces): [http://www.youtube.com/](http://www.youtube.com/ "http://www.youtube.com/")
+
+@ref robotleiras "Az általunk használt robot bemutatása itt olasható."
+
+@ref diagramok "Itt láthatóak az általunk készített UML diagramok."
