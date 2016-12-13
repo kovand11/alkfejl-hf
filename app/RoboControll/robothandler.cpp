@@ -94,7 +94,16 @@ void RobotHandler::speedAndSteerChanged(qreal speed,qreal steer,bool isForward,b
 
     if (isStop)
         sendCommandToRobot("stop");
+}
 
+void RobotHandler::steerTest()
+{
+    sendCommandToRobot("steertest");
+}
+
+void RobotHandler::startTest()
+{
+    sendCommandToRobot("starttest");
 }
 
 std::pair<QString, QStringList> RobotHandler::preprocessCommand(QString command)
@@ -197,6 +206,16 @@ void RobotHandler::executeCommand(QString verb, QStringList params)
         else
             logLine("Error: distance has an invalid param list: " + params.join(','));
 
+    }
+
+    else if (verb == "startresult" || verb == "turnresult")
+    {
+        logLine(verb+ ": " + params.join(','));
+    }
+
+    else if (verb == "log")
+    {
+        logLine("Robotlog: " + params.join(' '));
     }
 
     else

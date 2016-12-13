@@ -21,6 +21,8 @@ int main(int argc, char *argv[])
     QObject::connect(root,SIGNAL(tcpDisconnect()),robotHandler,SLOT(onDisconnect()));
     QObject::connect(root,SIGNAL(tcpConnect(QString)),robotHandler,SLOT(onConnect(QString)));
     QObject::connect(root,SIGNAL(speedAndSteerChanged(qreal,qreal,bool,bool,bool)),robotHandler,SLOT(speedAndSteerChanged(qreal,qreal,bool,bool,bool)));
+    QObject::connect(root,SIGNAL(steerTest()),robotHandler,SLOT(steerTest()));
+    QObject::connect(root,SIGNAL(startTest()),robotHandler,SLOT(startTest()));
 
     //C++ to UI
     QObject::connect(robotHandler,SIGNAL(logLine(QString)),root,SIGNAL(addLogLine(QString)));
@@ -31,7 +33,6 @@ int main(int argc, char *argv[])
     QObject::connect(robotHandler,SIGNAL(steerChanged(QString)),root,SIGNAL(steerChanged(QString)));
     QObject::connect(robotHandler,SIGNAL(distanceChanged(qreal)),root,SIGNAL(distanceChanged(qreal)));
     QObject::connect(robotHandler,SIGNAL(rgbChanged(qreal,qreal,qreal)),root,SIGNAL(rgbChanged(qreal,qreal,qreal)));
-
 
     return app.exec();
 }

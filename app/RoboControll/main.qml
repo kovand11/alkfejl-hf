@@ -90,6 +90,8 @@ ApplicationWindow {
     signal tcpDisconnect()
     signal tcpSend(string message,bool isEmulated)
     signal speedAndSteerChanged(real speed,real steer,bool isForward,bool isBackward,bool isStop)
+    signal steerTest()
+    signal startTest()
 
     RowLayout
     {
@@ -144,6 +146,7 @@ ApplicationWindow {
                 property bool isForward: false
                 MouseArea
                 {
+                    enabled: isTcpConnected || isEmulatedCheckBox.checked
                     property int correctedMouseX: 0
                     property int correctedMouseY: 0
                     anchors.fill: parent
@@ -273,10 +276,12 @@ ApplicationWindow {
                         spacing: 10
                         Button{
                             text: "Steer test"
+                            onClicked: steerTest()
                         }
 
                         Label{
                             text: "Result"
+
                         }
 
                     }
@@ -285,6 +290,7 @@ ApplicationWindow {
                         spacing: 10
                         Button{
                             text: "Start test"
+                            onClicked: startTest()
 
                         }
 
@@ -328,13 +334,6 @@ ApplicationWindow {
                         text: "Emulate robot"
                     }
 
-                    CheckBox
-                    {
-                        id: isShowAllOnPlot
-                        text: "Show every data on plot"
-                        enabled: false
-                        checked: true
-                    }
 
                     /*Button
                     {
