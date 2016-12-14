@@ -324,52 +324,9 @@ ApplicationWindow {
                         id: isEmulatedCheckBox
                         text: "Emulate robot"
                     }
-
-
-                    /*Button
-                    {
-                        text: "For Debug"
-                        onClicked: {
-
-
-                            if (rChannel.count == 20) //all channel has the same count
-                            {
-                                rChannel.removePoints(0,1);
-                                gChannel.removePoints(0,1);
-                                bChannel.removePoints(0,1);
-                                axisXc.max = axisXc.max+1
-                                axisXc.min = axisXc.min+1
-                            }
-                            var x = rChannel.count < 19 ? rChannel.count : axisXc.max
-                            rChannel.append(x,(Math.sin(x/3)+1)/2)
-                            gChannel.append(x,(Math.sin(x/3 + 1)+1)/2)
-                            bChannel.append(x,(Math.sin(x/3 + 2)+1)/2)
-
-
-                        }
-                    }
-
-                    Label{
-                        id: debugLabel1
-                    }
-
-                    Label{
-                        id: debugLabel2
-                    }
-
-                    Label{
-                        id: debugLabel3
-                    }
-
-                    Label{
-                        id: debugLabel4
-                    }*/
                 }
 
             }
-
-
-
 
         }
 
@@ -391,13 +348,13 @@ ApplicationWindow {
                 ValueAxis {
                        id: axisYd
                        min: 0
-                       max: 5
+                       max: 50
                    }
 
 
                 LineSeries {
                     id: distanceData
-                    name: "distance (m)"
+                    name: "distance (cm)"
                     axisX: axisXd
                     axisY: axisYd
                 }
