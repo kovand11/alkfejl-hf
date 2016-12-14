@@ -60,7 +60,10 @@ void RobotHandler::onSend(QString command,bool isEmulatedInput)
 
 void RobotHandler::readTcpData()
 {
-    emit logLine(QString(tcpSocket->readAll()));
+    QByteArray data = tcpSocket->readAll();
+    std::pair<QString, QStringList> preprocessedCommand = preprocessCommand(QString(data));
+    executeCommand(preprocessedCommand.first,preprocessedCommand.second);
+    emit logLine(QString(data));
 }
 
 void RobotHandler::onTcpConnected()
@@ -228,7 +231,10 @@ void RobotHandler::executeCommand(QString verb, QStringList params)
 void RobotHandler::sendCommandToRobot(QString command)
 {
     if (tcpSocket->isOpen())
+    {
         tcpSocket->write(command.toStdString().c_str());
+        tcpSocket->flush();
+    }
 
     if (true)
         logLine("Output: " + command);
