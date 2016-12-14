@@ -279,11 +279,6 @@ ApplicationWindow {
                             onClicked: steerTest()
                         }
 
-                        Label{
-                            text: "Result"
-
-                        }
-
                     }
 
                     RowLayout{
@@ -293,14 +288,10 @@ ApplicationWindow {
                             onClicked: startTest()
 
                         }
+                    }
 
-                        Label{
-                            text: "<u>Result</u>"
-                            color: "blue"
-
-
-                        }
-
+                    Label {
+                        text: "The test results will be displayed in the console."
                     }
 
 
