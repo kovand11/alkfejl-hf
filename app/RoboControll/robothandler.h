@@ -29,8 +29,10 @@ public:
 signals:
     /**
      * @brief Notifies the UI of a change in the connection status.
+     * @param busy True, if tcpStatus is busy, false otherwise.
+     * @param connected True, if tcpStatus is connected, false otherwise.
      */
-    void connectionStatusChanged(bool,bool);
+    void connectionStatusChanged(bool busy,bool connected);
 
     /**
      * @brief Signals the arrival of a new message to be written to the log on the UI.
@@ -48,32 +50,39 @@ signals:
     /**
      * @brief Notifies the UI about the changed touch sensor value and supplies the new value.
      * @note It is recommended to connect this signal to the UI.
+     * @param checked True, if touch sensor is active, false otherwise.
      */
-    void touchSensorChanged(bool);
+    void touchSensorChanged(bool checked);
 
     /**
      * @brief Notifies the UI about the changed speed and supplies the new value.
      * @note It is recommended to connect this signal to the UI.
+     * @param speed The new speed value in m/s.
      */
-    void speedChanged(QString);
+    void speedChanged(QString speed);
 
     /**
      * @brief Notifies the UI about the changed steer and supplies the new value.
      * @note It is recommended to connect this signal to the UI.
+     * @param steer The new steering angle.
      */
-    void steerChanged(QString);
+    void steerChanged(QString steer);
 
     /**
      * @brief Notifies the UI about the changed distance value and supplies the new value.
      * @note It is recommended to connect this signal to the UI.
+     * @param distance The new distance value in cm-s.
      */
-    void distanceChanged(qreal);
+    void distanceChanged(qreal distance);
 
     /**
      * @brief Notifies the UI about the changed RGB sensor value and supplies the new R, G and B color values.
      * @note It is recommended to connect this signal to the UI.
+     * @param r The sensors red value.
+     * @param g The sensors green value.
+     * @param b The sensors blue value.
      */
-    void rgbChanged(qreal,qreal,qreal);
+    void rgbChanged(qreal r,qreal g,qreal b);
 
 public slots:
     /**
