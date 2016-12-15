@@ -63,7 +63,7 @@ void RobotHandler::readTcpData()
     QByteArray data = tcpSocket->readAll();
     std::pair<QString, QStringList> preprocessedCommand = preprocessCommand(QString(data));
     executeCommand(preprocessedCommand.first,preprocessedCommand.second);
-    emit logLine(QString(data));
+    emit logLine("Input: " + QString(data));
 }
 
 void RobotHandler::onTcpConnected()
