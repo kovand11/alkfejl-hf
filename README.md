@@ -1,4 +1,4 @@
-@mainpage Alkalmazásfejlesztés Házi Feladat
+Alkalmazásfejlesztés Házi Feladat
  
 Csapatnév: Müzli
  
@@ -7,10 +7,6 @@ Csapattagok Neptun kóddal:
   * Konkolyi Krisztina (D93YHN)
   * Kovács András (HIC199)
 
-Bemutató videó URL (max. 5 perces): [http://www.youtube.com/](https://www.youtube.com/watch?v=AJrWKAiiVqw&feature=youtu.be/ "http://www.youtube.com/")
+Bemutató videó URL (max. 5 perces): [https://www.youtube.com/watch?v=AJrWKAiiVqw](https://www.youtube.com/watch?v=AJrWKAiiVqw)
 
-@ref robotleiras "Az általunk használt robot bemutatása itt olasható."
-
-@ref diagramok "Itt láthatóak az általunk készített UML diagramok."
-
-@ref commands "Felhasználói leírás."
+A további dokumentáció a doc mappában található.
