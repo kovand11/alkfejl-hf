@@ -58,7 +58,7 @@ PROJECT_LOGO           = C:/git/alkfejlhf-muzli/doc/pictures/Product_EV3ERSTORM_
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../../../git/alkfejlhf-muzli/doc/doxygen_output
+OUTPUT_DIRECTORY       = ../../../Users/Kriszti/Desktop
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -794,7 +794,8 @@ INPUT                  = ../../../git/alkfejlhf-muzli/doc/borito.md \
                          ../../../git/alkfejlhf-muzli/doc/legoMindstorms.md \
                          ../../../git/alkfejlhf-muzli/doc/diagramok.md \
                          ../../../git/alkfejlhf-muzli/app/RoboControll \
-                         ../../../git/alkfejlhf-muzli/app/UnitTest
+                         ../../../git/alkfejlhf-muzli/app/UnitTest \
+                         parancsok.md
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
